@@ -157,7 +157,7 @@ exports.deletePost = async (req, res, next) => {
   try {
     const postId = req.params.id;
     const userId = req.user.id;
-    const post = await Recruit_post.findOne({
+    const post = await RecruitPost.findOne({
       attributes: ["creator_id", "company_logo"],
       where: { id: postId },
     });

@@ -16,7 +16,7 @@ const router = express.Router();
 // auth/~
 router.post("/join", isNotLoggedIn, join);
 router.post("/login", isNotLoggedIn, login);
-router.get("/logout", isLoggedIn, logout);
+router.post("/logout", isLoggedIn, logout);
 
 // GET /auth/session - session 확인 (로그인이 유효한지 확인)
 router.get("/session", getSession);

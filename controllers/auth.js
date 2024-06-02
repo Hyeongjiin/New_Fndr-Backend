@@ -78,7 +78,7 @@ exports.login = (req, res, next) => {
   })(req, res, next); // middleware 확장 패턴
 };
 
-// GET /auth/logout
+// POST /auth/logout
 exports.logout = (req, res, next) => {
   // session cookie를 삭제한다. 브라우저에 sconnect.id가 있어도 이제 소용없다.
   req.logout(() => {
