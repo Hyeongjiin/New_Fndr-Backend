@@ -49,7 +49,7 @@ exports.myLikes = async (req, res, next) => {
       where: { id: userId },
       include: [
         {
-          model: Recruit_post,
+          model: RecruitPost,
           attributes: [
             "id",
             "nation_id",
@@ -66,7 +66,7 @@ exports.myLikes = async (req, res, next) => {
           },
         },
       ],
-      order: [[Recruit_post, "posted_date", "DESC"]],
+      order: [[RecruitPost, "posted_date", "DESC"]],
     });
 
     if (!posts || posts.length === 0) {
