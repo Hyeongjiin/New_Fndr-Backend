@@ -45,7 +45,7 @@ const options = {
 app.use(cors(options));
 //app.use('/', express.static(__dirname, 'public')); // 요청 경로 와 실제 경로
 app.use(express.static(path.join(__dirname, "public")));
-app.use("/", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser(process.env.COOKIE_SECRET)); // 쿠키 파싱을 간단하게 해주는 용도
 app.use(express.json()); // req.body를 ajax json 요청으로 부터 쉽게 꺼내준다.
 app.use(express.urlencoded({ extended: true })); // req.body를 form으로 부터 쉽게 꺼내준다. true면 qs, false면 querystring 사용
