@@ -221,3 +221,34 @@ exports.password = async (req, res, next) => {
     });
   }
 };
+
+exports.nickname = async (req, res, next) => {
+  try {
+    const id = req.user.id;
+    const nickname = req.body.nickname;
+    const exUser = await User.findOne({ where: { id: id } });
+    if (exUser) {
+      await User.update(
+        { user_name: nickname },
+        {
+          where: { id: id },
+        }
+      );
+      return res.send({
+        Message: "이름 변경이 완료되었습니다.",
+        ResultCode: "Nickname_Change_Success",
+      });
+    } else {
+      return res.send({
+        Message: "존재하지 않는 회원입니다.",
+        ResultCode: "Account_Not_Exist",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      Message: "이름 변경 서버 에러",
+      ResultCode: "ERR_INTERNAL_SERVER",
+    });
+  }
+};

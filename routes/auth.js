@@ -9,6 +9,7 @@ const {
   account,
   password,
   passwordCheck,
+  nickname,
 } = require("../controllers/auth");
 
 const router = express.Router();
@@ -29,5 +30,7 @@ router.post("/password", isLoggedIn, passwordCheck);
 
 // PATCH /auth/password - 비밀번호 변경
 router.patch("/password", isLoggedIn, password);
+
+router.patch("/nickname", isLoggedIn, nickname);
 
 module.exports = router;
