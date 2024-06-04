@@ -83,7 +83,7 @@ const COUNTRIES = [
   "netherlands",
   "australia",
   "singapore",
-  "hongkong",
+  "hong-kong",
   "japan",
 ];
 const LIMIT = 100;
