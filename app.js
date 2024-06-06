@@ -57,6 +57,7 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: false, // https 적용시 true
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     },
     name: "connect.sid",
   })
