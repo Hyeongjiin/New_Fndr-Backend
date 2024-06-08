@@ -1,27 +1,11 @@
 const express = require("express");
 const multer = require("multer");
 const router = express.Router();
-const path = require("path");
-const fs = require("fs");
-const { S3Client } = require("@aws-sdk/client-s3");
+const { s3 } = require("../s3"); // s3.js 파일에서 s3 객체를 가져옴
 const multerS3 = require("multer-s3");
 
 const { uploadPost, updatePost, deletePost } = require("../controllers/job");
 const { isLoggedIn } = require("../middlewares");
-
-try {
-  fs.readdirSync("uploads");
-} catch {
-  fs.mkdirSync("uploads");
-}
-
-const s3 = new S3Client({
-  credentials: {
-    accessKeyId: process.env.S3_ACCESS_KEY_ID,
-    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-  },
-  region: "ap-northeast-2",
-});
 
 const upload = multer({
   storage: multerS3({
