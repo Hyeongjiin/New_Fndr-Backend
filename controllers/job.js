@@ -25,7 +25,8 @@ exports.uploadPost = async (req, res, next) => {
     };
 
     if (req.file) {
-      createData.company_logo = req.file.path;
+      console.log("파일 간다", req.file.location);
+      createData.company_logo = req.file.location;
     }
 
     const post = await RecruitPost.create(createData);
@@ -101,7 +102,7 @@ exports.updatePost = async (req, res, next) => {
     };
 
     if (req.file) {
-      updateData.company_logo = req.file.path;
+      updateData.company_logo = req.file.location;
       const oldLogoPath = post.company_logo;
       if (oldLogoPath) {
         const fullPath = path.join(
