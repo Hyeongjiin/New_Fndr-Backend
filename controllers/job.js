@@ -1,9 +1,7 @@
 const RecruitPost = require("../models/recruit_post");
 const Tag = require("../models/tag");
-const fs = require("fs");
-const path = require("path");
-
-const appRoot = path.resolve(__dirname, "..");
+const { s3 } = require("../s3"); // s3.js 파일에서 s3 객체를 가져옴
+const { DeleteObjectCommand } = require("@aws-sdk/client-s3");
 
 exports.uploadPost = async (req, res, next) => {
   try {
@@ -25,7 +23,8 @@ exports.uploadPost = async (req, res, next) => {
     };
 
     if (req.file) {
-      createData.company_logo = req.file.path;
+      console.log("파일 간다", req.file.location);
+      createData.company_logo = req.file.location;
     }
 
     const post = await RecruitPost.create(createData);
@@ -101,23 +100,27 @@ exports.updatePost = async (req, res, next) => {
     };
 
     if (req.file) {
-      updateData.company_logo = req.file.path;
+      // 기존 로고 삭제
       const oldLogoPath = post.company_logo;
       if (oldLogoPath) {
-        const fullPath = path.join(
-          appRoot,
-          "uploads",
-          path.basename(oldLogoPath)
-        );
-        console.log(`파일 경로: ${fullPath}`);
-        fs.unlink(fullPath, (err) => {
-          if (err) {
-            console.error(`기존 로고 파일 삭제 실패: ${err}`);
-          } else {
-            console.log("기존 로고 삭제 성공");
-          }
-        });
+        const bucketName = process.env.S3_BUCKET;
+        const key = oldLogoPath.split(".com/")[1]; // S3 URL에서 키 추출
+        const deleteParams = {
+          Bucket: bucketName,
+          Key: key,
+        };
+
+        try {
+          const deleteCommand = new DeleteObjectCommand(deleteParams);
+          await s3.send(deleteCommand);
+          console.log("기존 로고 삭제 성공");
+        } catch (err) {
+          console.error(`기존 로고 파일 삭제 실패: ${err}`);
+        }
       }
+
+      // 새로운 로고 경로 설정
+      updateData.company_logo = req.file.location;
     }
 
     const updatePost = await RecruitPost.update(updateData, {
@@ -177,19 +180,20 @@ exports.deletePost = async (req, res, next) => {
 
     const oldLogoPath = post.company_logo;
     if (oldLogoPath) {
-      const fullPath = path.join(
-        appRoot,
-        "uploads",
-        path.basename(oldLogoPath)
-      );
-      console.log(`파일 경로: ${fullPath}`);
-      fs.unlink(fullPath, (err) => {
-        if (err) {
-          console.error(`기존 로고 파일 삭제 실패: ${err}`);
-        } else {
-          console.log("기존 로고 삭제 성공");
-        }
-      });
+      const bucketName = process.env.S3_BUCKET;
+      const key = oldLogoPath.split(".com/")[1]; // S3 URL에서 키 추출
+      const deleteParams = {
+        Bucket: bucketName,
+        Key: key,
+      };
+
+      try {
+        const deleteCommand = new DeleteObjectCommand(deleteParams);
+        await s3.send(deleteCommand);
+        console.log("기존 로고 삭제 성공");
+      } catch (err) {
+        console.error(`기존 로고 파일 삭제 실패: ${err}`);
+      }
     }
 
     const deletePost = await RecruitPost.destroy({

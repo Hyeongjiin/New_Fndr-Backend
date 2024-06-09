@@ -4,25 +4,36 @@
   "description": "New_fndr",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app"
+    "start": "cross-env NODE_ENV=production PORT=80 pm2 start node app.js -i -1",
+    "dev": "nodemon app",
+    "test": "jest"
   },
   "author": "Jin",
   "license": "MIT",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.592.0",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
+    "connect-redis": "^7.1.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
+    "helmet": "^7.1.0",
+    "hpp": "^0.2.3",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
+    "multer-s3": "^3.0.1",
     "mysql2": "^3.9.7",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
+    "pm2": "^5.4.0",
+    "redis": "^4.6.14",
     "sequelize": "^6.37.3",
-    "sequelize-cli": "^6.6.2"
+    "sequelize-cli": "^6.6.2",
+    "winston": "^3.13.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.0",

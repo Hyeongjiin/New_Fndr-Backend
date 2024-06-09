@@ -3,13 +3,23 @@ const express = require("express");
 const path = require("path"); // 경로 설정
 const morgan = require("morgan");
 const cors = require("cors");
-
 const { sequelize } = require("./models");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const passport = require("passport");
+const helmet = require("helmet");
+const hpp = require("hpp");
+const logger = require("./logger");
+const redis = require("redis");
+const RedisStore = require("connect-redis").default;
 
 dotenv.config(); // .env의 내용이 process.env 안에 들어간다.
+const redisClient = redis.createClient({
+  url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+  password: process.env.REDIS_PASSWORD,
+});
+redisClient.connect().catch(console.error);
+
 const mainRouter = require("./routes/main");
 const authRouter = require("./routes/auth");
 const jobRouter = require("./routes/job");
@@ -22,7 +32,6 @@ const passportConfig = require("./passport");
 
 const app = express();
 passportConfig();
-
 app.set("port", process.env.PORT || 8080);
 
 sequelize
@@ -35,7 +44,22 @@ sequelize
   });
 
 // middleware 순서에 따라서 작동이 달라진다.
-app.use(morgan("dev")); // 로그 찍어주는 용도
+if (process.env.NODE_ENV === "production") {
+  app.enable("trust proxy"); // proxy 서버 설정
+  app.use(morgan("combined"));
+  // HTTP 헤더 설정을 통한 애플리케이션 보안 강화
+  app.use(
+    helmet({
+      contentSecurityPolicy: false,
+      crossOriginEmbedderPolicy: false,
+      crossOriginResourcePolicy: false,
+    })
+  );
+  // 중복 이름 파아미터 공격 방어
+  app.use(hpp());
+} else {
+  app.use(morgan("dev")); // 로그 찍어주는 용도
+}
 
 const options = {
   origin: ["http://localhost:3000"],
@@ -49,19 +73,22 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(cookieParser(process.env.COOKIE_SECRET)); // 쿠키 파싱을 간단하게 해주는 용도
 app.use(express.json()); // req.body를 ajax json 요청으로 부터 쉽게 꺼내준다.
 app.use(express.urlencoded({ extended: true })); // req.body를 form으로 부터 쉽게 꺼내준다. true면 qs, false면 querystring 사용
-app.use(
-  session({
-    resave: false,
-    saveUninitialized: false,
-    secret: process.env.COOKIE_SECRET,
-    cookie: {
-      httpOnly: true,
-      secure: false, // https 적용시 true
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    },
-    name: "connect.sid",
-  })
-);
+const sessionOption = {
+  resave: false,
+  saveUninitialized: false,
+  secret: process.env.COOKIE_SECRET,
+  cookie: {
+    httpOnly: true,
+    secure: false, // https 적용시 true
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  },
+  store: new RedisStore({ client: redisClient }),
+};
+if (process.env.NODE_ENV === "production") {
+  sessionOption.proxy = true; // nxginx 사용시 필요
+  // sessionOption.cookie.secure = ture;
+}
+app.use(session(sessionOption));
 app.use(passport.initialize()); // req.user, req.login, req.isAuthenticate, req.logout
 app.use(passport.session()); // connect.sid라는 이름으로 session 쿠키가 브라우저로 전송
 // 브라우저에 connect.sid = randomvalue 전송

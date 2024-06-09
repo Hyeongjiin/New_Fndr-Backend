@@ -1,28 +1,24 @@
 const express = require("express");
-const router = express.Router();
-const { isLoggedIn } = require("../middlewares");
-const { uploadPost, updatePost, deletePost } = require("../controllers/job");
-const fs = require("fs");
-const path = require("path");
 const multer = require("multer");
+const router = express.Router();
+const { s3 } = require("../s3"); // s3.js 파일에서 s3 객체를 가져옴
+const multerS3 = require("multer-s3");
 
-try {
-  fs.readdirSync("uploads");
-} catch {
-  fs.mkdirSync("uploads");
-}
+const { uploadPost, updatePost, deletePost } = require("../controllers/job");
+const { isLoggedIn } = require("../middlewares");
 
 const upload = multer({
-  storage: multer.diskStorage({
-    destination(req, file, cb) {
-      cb(null, "uploads/");
+  storage: multerS3({
+    s3,
+    bucket: "new-fndr",
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    key: (req, file, cb) => {
+      console.log("파일입니다", file);
+      // 콜백 함수 두 번째 인자에 파일명(경로 포함)을 입력
+      cb(null, `image/fndr${Date.now()}_${file.originalname}`);
     },
-    filename(req, file, cb) {
-      const ext = path.extname(file.originalname);
-      cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
-    },
+    limits: { fileSize: 5 * 1024 * 1024 },
   }),
-  limits: { fileSize: 5 * 1024 * 1024 },
 });
 
 // 채용공고 등록
