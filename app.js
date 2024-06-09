@@ -3,6 +3,7 @@ const express = require("express");
 const path = require("path"); // 경로 설정
 const morgan = require("morgan");
 const cors = require("cors");
+const router = express.Router();
 const { sequelize } = require("./models");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
