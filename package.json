@@ -4,7 +4,7 @@
   "description": "New_fndr",
   "main": "app.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production PORT=80 pm2 start node app.js -i -1",
+    "start": "cross-env NODE_ENV=production PORT=8080 pm2 start node app.js -i -1",
     "dev": "nodemon app",
     "test": "jest"
   },
