@@ -22,7 +22,7 @@ exports.myPosts = async (req, res, next) => {
       order: [["posted_date", "DESC"]],
     });
     if (post.length == 0) {
-      return res.status(404).json({
+      return res.json({
         Message: "작성한 채용공고가 존재하지 않습니다.",
         ResultCode: "JobPost_Not_Exist",
       });
