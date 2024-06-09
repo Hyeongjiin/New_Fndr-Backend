@@ -98,16 +98,7 @@ exports.web3Post = async (req, res, next) => {
     for (let i = 0; i < COUNTRIES.length; i++) {
       const country = COUNTRIES[i];
       const apiUrl = `${api}?token=${token}&country=${country}&remote=true&limit=${LIMIT}`;
-      const response = await axios.get(apiUrl, {
-        headers: {
-          "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-          Accept: "application/json",
-          "Accept-Language": "en-US,en;q=0.9",
-          Referer: "https://example.com/",
-        },
-        withCredentials: true, // 쿠키를 포함하여 요청을 전송
-      });
+      const response = await axios.get(apiUrl);
       const jobDataArray = response.data[2];
       jobDataArray.forEach((jobData) => {
         if (!existingLinks.has(jobData.apply_url)) {
