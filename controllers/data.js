@@ -90,6 +90,7 @@ const LIMIT = 100;
 
 exports.web3Post = async (req, res, next) => {
   try {
+    // 오타 수정
     const recruitPosts = [];
     const existingLinks = new Set();
     const api = process.env.WEB3_API;
