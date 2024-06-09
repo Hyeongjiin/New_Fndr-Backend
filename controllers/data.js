@@ -98,17 +98,8 @@ exports.web3Post = async (req, res, next) => {
     for (let i = 0; i < COUNTRIES.length; i++) {
       const country = COUNTRIES[i];
       const apiUrl = `${api}?token=${token}&country=${country}&remote=true&limit=${LIMIT}`;
-      const response = await fetch(apiUrl, {
-        headers: {
-          "Content-Type": "application/json",
-          "User-Agent":
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-        },
-      });
-      console.log(response);
-      const data = await response.json();
-      console.log(data);
-      const jobDataArray = data[2];
+      const response = await axios.get(apiUrl);
+      const jobDataArray = response.data[2];
       jobDataArray.forEach((jobData) => {
         if (!existingLinks.has(jobData.apply_url)) {
           const isVisaSponsored = jobData.description.includes("relocat");
