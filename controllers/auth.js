@@ -6,6 +6,10 @@ const bcrypt = require("bcrypt");
 exports.join = async (req, res, next) => {
   try {
     const { email, name, password } = req.body;
+    let check = 1;
+    if (process.env.NODE_ENV === "production") {
+      check = 2;
+    }
     const exUser = await User.findOne({ where: { user_email: email } });
     if (exUser) {
       return res.send({
@@ -22,6 +26,7 @@ exports.join = async (req, res, next) => {
     return res.send({
       Message: "회원가입이 완료되었습니다.",
       ResultCode: "Signup_Success",
+      Check: check,
     });
   } catch (error) {
     console.log(error);
