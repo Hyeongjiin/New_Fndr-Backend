@@ -67,6 +67,11 @@ const options = {
   credentials: true,
   optionSuccessStatus: 200,
 };
+router.use((req, res, next) => {
+  res.locals.user = req.user;
+  req.session;
+  next();
+});
 app.use(cors(options));
 //app.use('/', express.static(__dirname, 'public')); // 요청 경로 와 실제 경로
 app.use(express.static(path.join(__dirname, "public")));
