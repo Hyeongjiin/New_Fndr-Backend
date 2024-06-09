@@ -6,7 +6,7 @@ module.exports = {
     username: "admin",
     password: process.env.DB_PASSWORD_DEVELOP,
     database: "fndr",
-    host: "127.0.0.1",
+    host: process.env.DB_ENDPOINT,
     dialect: "mysql",
   },
   test: {
@@ -20,7 +20,7 @@ module.exports = {
     username: "admin",
     password: process.env.DB_PASSWORD_DEVELOP,
     database: "fndr",
-    host: "127.0.0.1",
+    host: process.env.DB_ENDPOINT,
     dialect: "mysql",
   },
 };
