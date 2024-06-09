@@ -97,7 +97,7 @@ exports.web3Post = async (req, res, next) => {
 
     for (let i = 0; i < COUNTRIES.length; i++) {
       const country = COUNTRIES[i];
-      const apiUrl = `${api}?token=${token}&country=${country}&remote=true&imit=${LIMIT}`;
+      const apiUrl = `${api}?token=${token}&country=${country}&remote=true&limit=${LIMIT}`;
       const response = await axios.get(apiUrl);
       const jobDataArray = response.data[2];
       jobDataArray.forEach((jobData) => {
