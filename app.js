@@ -62,7 +62,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 const options = {
-  origin: ["http://localhost:3000"],
+  origin: "*",
   credentials: true,
   optionSuccessStatus: 200,
 };
