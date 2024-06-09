@@ -45,6 +45,7 @@ sequelize
 
 // middleware 순서에 따라서 작동이 달라진다.
 if (process.env.NODE_ENV === "production") {
+  console.log("배포 모드 입니다");
   app.enable("trust proxy"); // proxy 서버 설정
   app.use(morgan("combined"));
   // HTTP 헤더 설정을 통한 애플리케이션 보안 강화
