@@ -93,7 +93,7 @@ exports.logout = (req, res, next) => {
 
 exports.getSession = async (req, res, next) => {
   try {
-    console.log(req.user);
+    console.log("유저: ", req.user);
     console.log(req.session);
     if (req.session && req.session.passport && req.session.passport.user) {
       res.send({
