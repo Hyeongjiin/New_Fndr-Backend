@@ -3,7 +3,6 @@ const express = require("express");
 const path = require("path"); // 경로 설정
 const morgan = require("morgan");
 const cors = require("cors");
-const router = express.Router();
 const { sequelize } = require("./models");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
@@ -68,11 +67,6 @@ const options = {
   credentials: true,
   optionSuccessStatus: 200,
 };
-router.use((req, res, next) => {
-  res.locals.user = req.user;
-  req.session;
-  next();
-});
 app.use(cors(options));
 //app.use('/', express.static(__dirname, 'public')); // 요청 경로 와 실제 경로
 app.use(express.static(path.join(__dirname, "public")));
