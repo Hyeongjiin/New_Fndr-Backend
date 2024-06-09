@@ -99,7 +99,9 @@ exports.web3Post = async (req, res, next) => {
       const country = COUNTRIES[i];
       const apiUrl = `${api}?token=${token}&country=${country}&remote=true&limit=${LIMIT}`;
       const response = await fetch(apiUrl);
+      console.log(response);
       const data = await response.json();
+      console.log(data);
       const jobDataArray = data[2];
       jobDataArray.forEach((jobData) => {
         if (!existingLinks.has(jobData.apply_url)) {
