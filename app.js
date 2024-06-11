@@ -84,7 +84,7 @@ const sessionOption = {
 };
 if (process.env.NODE_ENV === "production") {
   sessionOption.proxy = true; // nxginx 사용시 필요
-  sessionOption.cookie.secure = ture; // https
+  sessionOption.cookie.secure = true; // https
 }
 app.use(session(sessionOption));
 app.use(passport.initialize()); // req.user, req.login, req.isAuthenticate, req.logout
