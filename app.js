@@ -1,6 +1,6 @@
 const dotenv = require("dotenv");
 const express = require("express");
-const path = require("path"); // 경로 설정
+const path = require("path");
 const morgan = require("morgan");
 const cors = require("cors");
 const { sequelize } = require("./models");
@@ -77,14 +77,14 @@ const sessionOption = {
   secret: process.env.COOKIE_SECRET,
   cookie: {
     httpOnly: true,
-    secure: false, // https 적용시 true
+    secure: true, // https 적용시 true
     maxAge: 7 * 24 * 60 * 60 * 1000,
   },
   store: new RedisStore({ client: redisClient }),
 };
 if (process.env.NODE_ENV === "production") {
   sessionOption.proxy = true; // nxginx 사용시 필요
-  // sessionOption.cookie.secure = ture; // https
+  sessionOption.cookie.secure = ture; // https
 }
 app.use(session(sessionOption));
 app.use(passport.initialize()); // req.user, req.login, req.isAuthenticate, req.logout
