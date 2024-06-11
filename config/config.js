@@ -3,10 +3,10 @@ dotenv.config();
 
 module.exports = {
   development: {
-    username: "admin",
-    password: process.env.DB_PASSWORD_DEVELOP,
+    username: "root",
+    password: process.env.DB_PASSWORD,
     database: "fndr",
-    host: process.env.DB_ENDPOINT,
+    host: "127.0.0.1",
     dialect: "mysql",
   },
   test: {

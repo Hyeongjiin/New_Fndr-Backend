@@ -20,16 +20,9 @@ const redisClient = redis.createClient({
 });
 redisClient.connect().catch(console.error);
 
-const mainRouter = require("./routes/main");
-const authRouter = require("./routes/auth");
-const jobRouter = require("./routes/job");
-const detailRouter = require("./routes/detail");
-const searchRouter = require("./routes/search");
-const likesRouter = require("./routes/likes");
-const mypageRouter = require("./routes/mypage");
-const dataRouter = require("./routes/data");
-const passportConfig = require("./passport");
+const indexRouter = require("./routes/index");
 
+const passportConfig = require("./passport");
 const app = express();
 passportConfig();
 app.set("port", process.env.PORT || 8080);
@@ -95,14 +88,7 @@ app.use(passport.session()); // connect.sid라는 이름으로 session 쿠키가
 // 브라우저에 connect.sid = randomvalue 전송
 // 이후 브라우저가 요청할 때 session cookie를 보내면 그 정보를 바탕으로 user 정보를 복원시킨다.
 // passport.deserializeUser 실행한다
-app.use("/main", mainRouter);
-app.use("/auth", authRouter);
-app.use("/job", jobRouter);
-app.use("/detail", detailRouter);
-app.use("/search", searchRouter);
-app.use("/likes", likesRouter);
-app.use("/mypage", mypageRouter);
-app.use("/data", dataRouter);
+app.use("/api", indexRouter);
 
 // 404 미들웨어
 app.use((req, res, next) => {
