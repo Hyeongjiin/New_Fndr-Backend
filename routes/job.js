@@ -10,7 +10,7 @@ const { isLoggedIn } = require("../middlewares");
 const upload = multer({
   storage: multerS3({
     s3,
-    bucket: "new-fndr",
+    bucket: process.env.S3_BUCKET,
     contentType: multerS3.AUTO_CONTENT_TYPE,
     key: (req, file, cb) => {
       console.log("파일입니다", file);
