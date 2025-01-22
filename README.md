@@ -6,8 +6,6 @@
 
 <br />
 
-[**🔗 배포중인 서비스 바로가기 **](https://fndr-test.duckdns.org/)
-
 [**🔗 Fndr 서비스 소개 영상 바로가기 **](https://youtu.be/Z1M5BK6jX6o) 
 
 [**🔗 Fndr 프론트엔드 저장소 바로가기 **](https://github.com/Seeds-kr/SWEVER-FrontEnd)
